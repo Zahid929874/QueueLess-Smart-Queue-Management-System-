@@ -581,7 +581,7 @@
                                 <i data-lucide="headset" class="w-3.5 h-3.5"></i>
                             </span>
                             <div>
-                                <span class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-amber-900 dark:group-hover:text-white block">Counter Operator Console</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-amber-900 dark:group-hover:text-white block">Counter Console</span>
                                 <span class="text-[10px] text-slate-400 dark:text-slate-500">Hotkey desk summoning workstation</span>
                             </div>
                         </div>
@@ -835,6 +835,10 @@
                         @endif
 
                         @if(auth()->user()->isOperator() || auth()->user()->isAdmin())
+                            <a href="{{ route('operator.dashboard') }}" @click="window.playTactileSound('click')"
+                               class="px-5 py-2 rounded-full transition-all duration-300 {{ request()->routeIs('operator.dashboard') ? 'bg-[#00c389] text-white font-bold shadow-sm shadow-mint' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                                Operator Overview
+                            </a>
                             <a href="{{ route('operator.console') }}" @click="window.playTactileSound('click')"
                                class="px-5 py-2 rounded-full transition-all duration-300 {{ request()->routeIs('operator.console') ? 'bg-[#00c389] text-white font-bold shadow-sm shadow-mint' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
                                 Operator Desk
@@ -848,6 +852,12 @@
                             </a>
                         @endif
                     @endauth
+                    @guest
+                        <a href="{{ route('operator.login') }}" @click="window.playTactileSound('click')"
+                           class="px-5 py-2 rounded-full transition-all duration-300 {{ request()->routeIs('operator.login', 'operator.register', 'operator.clearance.pending') ? 'bg-[#00c389] text-white font-bold shadow-sm shadow-mint' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white' }}">
+                            Operator Desk
+                        </a>
+                    @endguest
                     <a href="{{ route('public.display') }}" target="_blank"
                        class="px-4 py-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition flex items-center gap-1">
                         Signage TV <i data-lucide="external-link" class="w-3 h-3 opacity-60"></i>
@@ -941,12 +951,16 @@
                     <a href="{{ route('student.join') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">Take Token</a>
                     <a href="{{ route('student.history') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">History</a>
                     @if(auth()->user()->isOperator() || auth()->user()->isAdmin())
-                        <a href="{{ route('operator.console') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">Operator Console</a>
+                        <a href="{{ route('operator.dashboard') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">Operator Overview</a>
+                        <a href="{{ route('operator.console') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">Operator Desk</a>
                     @endif
                     @if(auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#142034]">Admin Analytics</a>
                     @endif
                 @endauth
+                @guest
+                    <a href="{{ route('operator.login') }}" class="block px-4 py-2 rounded-xl text-xs font-bold {{ request()->routeIs('operator.login', 'operator.register', 'operator.clearance.pending') ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300' : 'text-slate-800 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-[#142034]' }}">Operator Desk</a>
+                @endguest
                 <a href="{{ route('public.display') }}" target="_blank" class="block px-4 py-2 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40">Signage TV</a>
             </div>
         </header>

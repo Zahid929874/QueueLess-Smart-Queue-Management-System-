@@ -80,6 +80,8 @@ class AuthController extends Controller
             'password' => 'required',
             'login_role' => 'nullable|in:STUDENT,COUNTER_OPERATOR,ADMIN',
         ]);
+        $loginRole = $credentials['login_role'] ?? null;
+        unset($credentials['login_role']);
 
         if (!Auth::attempt($credentials, $request->boolean('remember'))) {
             throw ValidationException::withMessages([
@@ -92,7 +94,7 @@ class AuthController extends Controller
         }
         $user = Auth::user();
 
-        if (!empty($credentials['login_role']) && $user->role !== $credentials['login_role']) {
+        if ($loginRole && $user->role !== $loginRole) {
             Auth::logout();
             throw ValidationException::withMessages([
                 'email' => ['This account cannot use the selected sign-in page.'],
