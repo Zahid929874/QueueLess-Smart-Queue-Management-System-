@@ -11,6 +11,8 @@
 ### Key Capabilities:
 - **Student Mobile-First PWA Tracker**: Join queues digitally, receive sequential human-readable tokens (`ACC-001`, `REG-014`), monitor live queue positions, view dynamic M/M/c wait-time predictions, and receive audio chime alerts when called.
 - **Counter Operator Console**: Desktop & tablet console equipped with atomic, race-condition-protected "Call Next", "Recall", live service stopwatch timer, "Complete", "Mark No-Show", ticket transfer workflows, walk-in quick ticketing, hotkeys, and voice synthesis.
+- **Operator Overview Dashboard**: Campus-wide queue KPIs, service desk status, queue flow, and recent activity at `/operator/dashboard`.
+- **Operator Desk**: Counter workstation for calling and serving students at `/operator/console`.
 - **Administrative Command Center**: Comprehensive KPI cards, Chart.js hourly arrival & throughput graphs, peak hour congestion heatmap matrix, live queue inspection, CSV reporting export, department & counter status toggles, and **automated M/M/c capacity recommendations** when counter utilization exceeds 85%.
 - **Public TV Digital Signage**: High-contrast, large-typography lobby display (`/display`) broadcasting currently serving tokens, counter numbers, recent calls, marquee announcements, audio chimes, Text-to-Speech (TTS) voice announcements, and fullscreen support.
 - **Multi-Server M/M/c & Erlang-C Predictive Engine**: Blends multi-server stochastic queuing theory with rolling historical service session times to estimate expected wait durations dynamically.

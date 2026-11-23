@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Counter;
 use App\Models\Department;
+use App\Models\QueueEvent;
 use App\Models\QueueTicket;
 use App\Models\Service;
 use App\Services\QueuePredictionService;
@@ -166,6 +167,57 @@ class ViewController extends Controller
             : collect();
 
         return view('student.history', compact('user', 'tickets'));
+    }
+
+    /**
+     * Operator overview dashboard
+     */
+    public function operatorDashboard(Request $request)
+    {
+        $user = $request->user();
+        $departments = Department::where('is_active', true)
+            ->with(['counters.currentAssignment.user'])
+            ->withCount([
+                'queueTickets as waiting_count' => fn ($query) => $query->where('status', 'WAITING'),
+                'counters as active_counters_count' => fn ($query) => $query->whereIn('status', ['AVAILABLE', 'BUSY']),
+                'counters as total_counters_count',
+            ])
+            ->orderBy('name')
+            ->get();
+
+        $departmentIds = $departments->modelKeys();
+        $ticketQuery = QueueTicket::whereIn('department_id', $departmentIds);
+
+        $waitingTickets = (clone $ticketQuery)->where('status', 'WAITING')->count();
+        $averageWaitMinutes = (clone $ticketQuery)
+            ->where('status', 'WAITING')
+            ->avg('estimated_wait_time_min');
+        $inServiceTickets = (clone $ticketQuery)->whereIn('status', ['CALLED', 'SERVING'])->count();
+        $servedToday = (clone $ticketQuery)
+            ->where('status', 'COMPLETED')
+            ->whereDate('completed_at', today())
+            ->count();
+
+        $recentActivity = QueueEvent::with([
+            'ticket.department',
+            'ticket.service',
+            'ticket.studentProfile.user',
+            'actor',
+        ])
+            ->whereHas('ticket', fn ($query) => $query->whereIn('department_id', $departmentIds))
+            ->latest('created_at')
+            ->limit(8)
+            ->get();
+
+        return view('operator.dashboard', compact(
+            'user',
+            'departments',
+            'waitingTickets',
+            'averageWaitMinutes',
+            'inServiceTickets',
+            'servedToday',
+            'recentActivity',
+        ));
     }
 
     /**

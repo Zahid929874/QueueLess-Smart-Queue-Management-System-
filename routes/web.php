@@ -91,6 +91,7 @@ Route::middleware(['auth', 'role:STUDENT,ADMIN'])->prefix('student')->group(func
 
 // Protected Operator Routes
 Route::middleware(['auth', 'role:COUNTER_OPERATOR,ADMIN'])->prefix('operator')->group(function () {
+    Route::get('/dashboard', [ViewController::class, 'operatorDashboard'])->name('operator.dashboard');
     Route::get('/console', [ViewController::class, 'operatorConsole'])->name('operator.console');
     Route::get('/', [ViewController::class, 'operatorConsole']);
 });
